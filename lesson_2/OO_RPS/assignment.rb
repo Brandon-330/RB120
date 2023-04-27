@@ -35,9 +35,10 @@ class RPSGame
       human.choose
       computer.choose
       display_winner
-      display_goodbye_message
-      break unless play_again?
+      break if (human.score >= 10 || computer.score >= 10)
     end
+
+    display_goodbye_message
   end
 
   def display_welcome_message
@@ -45,6 +46,7 @@ class RPSGame
   end
 
   def display_goodbye_message
+    puts "You had a score of #{human.score}, and #{computer.name} had a score of #{computer.score}"
     puts "Thank you for playing Rock, Paper, Scissors. Good bye!"
   end
 
@@ -53,9 +55,9 @@ class RPSGame
     puts "#{computer.name} chose #{computer.move}"
 
     if human.move > computer.move
-      puts "#{human.name} won!"
+      human.win_round
     elsif human.move < computer.move
-      puts "#{computer.name} won!"
+      computer.win_round
     else
       puts "It's a tie!"
     end
@@ -112,10 +114,17 @@ class Move
 end
 
 class Player
-  attr_accessor :move, :name
+  attr_accessor :move, :name, :score
 
   def initialize
     set_name
+    @score = 0
+  end
+
+  def win_round
+    self.score += 1
+    puts "#{self.name} won the round!"
+    puts ""
   end
 end
 
