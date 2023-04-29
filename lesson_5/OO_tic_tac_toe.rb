@@ -24,18 +24,43 @@ class TTTGame
 
   def play
     display_welcome_message
-    display_board
     loop do
-      human_moves
-      break if board.full? || board.someone_won?
+      clear_screen_and_display_board
 
-      computer_moves
-      display_board
-      break if board.full? || board.someone_won?
+      loop do
+        human_moves
+        break if board.full? || board.someone_won?
+
+        computer_moves
+        break if board.full? || board.someone_won?
+        
+        display_board
+      end
+      display_result
+      break unless play_again?
+      reset
     end
 
-    display_result
     display_goodbye_message
+  end
+
+  def reset
+    board.reset
+    clear
+    puts "Let's play again!"
+    puts ""
+  end
+
+  def play_again?
+    answer = nil
+    loop do
+      puts "Would you like to play again? (y/n)"
+      answer = gets.chomp.downcase
+      break if %w(y n).include? answer
+      puts "Sorry, must be y or n"
+    end
+
+    answer == 'y'
   end
 
   def display_welcome_message
@@ -46,8 +71,12 @@ class TTTGame
     puts "Thank you for playing Tic Tac Toe. Goodbye!"
   end
 
+  def clear_screen_and_display_board
+    clear
+    display_board
+  end
+
   def display_board
-    system 'clear'
     puts ""
     puts "     |     |"
     puts "  #{board.get_square_at(1)}  |  #{board.get_square_at(2)}  |  #{board.get_square_at(3)}"
@@ -61,6 +90,10 @@ class TTTGame
     puts "  #{board.get_square_at(7)}  |  #{board.get_square_at(8)}  |  #{board.get_square_at(9)}"
     puts "     |     |"
     puts ""
+  end
+
+  def clear
+    system 'clear'
   end
 
   def human_moves
@@ -82,7 +115,7 @@ class TTTGame
 
   def display_result
     display_board
-    case board.detect_winner
+    case board.winning_marker
     when human.marker then puts "You won!"
     when computer.marker then puts "Computer won!"
     else
@@ -98,7 +131,7 @@ class Board
 
   def initialize
     @squares = {}
-    (1..9).each { |key| @squares[key] = Square.new}
+    reset
     # Set the grid board, possibly squares?
     # Introuce the game
     # Data structure
@@ -120,19 +153,31 @@ class Board
     unmarked_keys.empty?
   end
 
-  def detect_winner
+  def count_human_marker(squares)
+    squares.map(&:marker).count(TTTGame::HUMAN_MARKER)
+  end
+
+  def count_computer_marker(squares)
+    squares.map(&:marker).count(TTTGame::COMPUTER_MARKER)
+  end
+
+  def winning_marker
     WINNING_LINES.each do |line|
-      if @squares[line[0]].marker == TTTGame::HUMAN_MARKER && @squares[line[1]].marker == TTTGame::HUMAN_MARKER && @squares[line[2]].marker == TTTGame::HUMAN_MARKER
+      if count_human_marker(@squares.values_at(*line)) == 3
         return TTTGame::HUMAN_MARKER
-      elsif @squares[line[0]].marker == TTTGame::COMPUTER_MARKER && @squares[line[1]].marker == TTTGame::COMPUTER_MARKER && @squares[line[2]].marker == TTTGame::COMPUTER_MARKER
+      elsif count_computer_marker(@squares.values_at(*line)) == 3
         return TTTGame::COMPUTER_MARKER
       end
     end
     nil
   end
 
+  def reset
+    (1..9).each { |key| @squares[key] = Square.new}
+  end
+
   def someone_won?
-    !!detect_winner
+    !!winning_marker
   end
 end
 
