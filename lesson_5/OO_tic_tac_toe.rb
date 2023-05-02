@@ -1,6 +1,7 @@
 =begin
 
-Tic tac toe is a game where a player plays against a computer. It is a turn based game. Each player starts with either an O mark, or an X mark
+Tic tac toe is a game where a player plays against a computer. It is a turn based game. 
+Each player starts with either an O mark, or an X mark
 Both players must mark a part of the board until there are 3 marks in a row
 
 Board
@@ -11,9 +12,6 @@ Player
 =end
 
 class TTTGame
-  HUMAN_MARKER = 'X'
-  COMPUTER_MARKER = 'O'
-
   attr_reader :board, :human, :computer
 
   def initialize
@@ -33,7 +31,7 @@ class TTTGame
 
         computer_moves
         break if board.full? || board.someone_won?
-        
+       
         display_board
       end
       display_result
@@ -68,7 +66,7 @@ class TTTGame
   end
 
   def display_goodbye_message
-    puts "Thank you for playing Tic Tac Toe. Goodbye!"
+    puts "Thank you #{human.name} for playing Tic Tac Toe. Goodbye!"
   end
 
   def clear_screen_and_display_board
@@ -109,14 +107,13 @@ class TTTGame
   end
 
   def computer_moves
-    num = (1..9).to_a.sample
     board.set_square_at(board.unmarked_keys.sample, computer.marker)
   end
 
   def display_result
     display_board
     case board.winning_marker
-    when human.marker then puts "You won!"
+    when human.marker then puts "#{human.name} won!"
     when computer.marker then puts "Computer won!"
     else
       puts "The board is full!" if board.full?
@@ -173,7 +170,7 @@ class Board
   end
 
   def reset
-    (1..9).each { |key| @squares[key] = Square.new}
+    (1..9).each { |key| @squares[key] = Square.new }
   end
 
   def someone_won?
@@ -201,10 +198,37 @@ class Square
 end
 
 class Player
-  attr_reader :marker
+  attr_reader :marker, :name
 
   def initialize(marker)
-    @marker = marker
+    @name = get_name
+    @marker = get_marker
+  end
+
+  def get_marker
+    answer = nil
+
+    puts "What is your marker?"
+    loop do
+      answer = gets.chomp
+      break if ['X', 'O'].include?(answer.upcase)
+      puts "Please enter an 'X' or 'O'"
+    end
+
+    answer
+  end
+
+  def get_name
+    answer = nil
+
+    loop do
+      puts "What is your name?"
+      answer = gets.chomp
+      break if answer.is_a? String
+      puts "Please enter your name"
+    end
+
+    answer
   end
 end
 
