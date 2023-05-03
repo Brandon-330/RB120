@@ -17,15 +17,19 @@ class Game
     @dealer = Player.new
   end
 
-  display_welcome_message
-  show_initial_cards
+  def start
+    display_welcome_message
+    @human.cards << deck.deal << deck.deal
+    @dealer.cards << deck.deal << deck.deal
+    show_initial_cards
 
-  loop do
-    player_turn
-    dealer_turn
-    break if player_turn.busted && dealer_turn.busted # Fix this
+    loop do
+      player_turn
+      dealer_turn
+      break if player_turn.busted && dealer_turn.busted # Fix this
+    end
+    show_result
   end
-  show_result
 
   def display_welcome_message
     puts "Welcome to Twenty One!"
@@ -38,13 +42,14 @@ class Game
   end
 
   def player_turn
-    show_cards
+    show_initial_cards
     puts "Would you like to hit or stay?"
     loop do
       answer = gets.chomp
       break if ['hit', 'stay'].include?(answer.downcase)
       puts "Please enter 'hit' or 'stay'"
     end
+  end
 end
 
 class Player
@@ -54,11 +59,7 @@ class Player
     @cards = []
     @busted = false
     @stay = true
-    2.times { |_| hit }
-  end
-
-  def hit
-    @cards << 
+    @hit = false
   end
 end
 
@@ -87,7 +88,7 @@ class Deck
   end
 
   def deal
-    #deal a card for the
+    @deck.pop
   end
 
   def reset
@@ -96,5 +97,10 @@ class Deck
         @deck << Card.new(rank, suit)
       end
     end
+
+    @deck.shuffle
   end
 end
+
+
+Game.new.start
