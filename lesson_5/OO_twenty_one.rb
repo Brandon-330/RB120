@@ -1,5 +1,6 @@
 =begin
-- Twenty one is a game where both players start with 2 cards Depending on the card
+- Twenty one is a game where both players start with 2 cards Depending on the
+card
 - Every card has its own value
 - A player may hit or bust depending on getting 21
 - Aces has a value of either 1 or 11
@@ -19,15 +20,23 @@ class Game
 
   def start
     display_welcome_message
-    @human.hand << deck.deal << deck.deal
-    @dealer.hand << deck.deal << deck.deal
+    deal_initial_cards
 
     loop do
       player_turn
       dealer_turn
-      break if @human.busted || !@human.hit
+      break if stay_or_bust?
     end
     show_result
+  end
+
+  def deal_initial_cards
+    @human.hand << deck.deal << deck.deal
+    @dealer.hand << deck.deal << deck.deal
+  end
+
+  def stay_or_bust?
+    !@human.hit || @human.busted
   end
 
   def display_welcome_message
@@ -53,16 +62,16 @@ class Game
       puts "Please enter 'hit' or 'stay'"
     end
 
-    @human.hit = (answer == 'hit' ? true : false)
+    @human.hit = (answer == 'hit')
     @human.hand << @deck.deal if @human.hit
-    @human.busted = true if total(@human)
+    @human.busted = true if total(@human) > 21
   end
 
   def dealer_turn
     loop do
       sum = total(@dealer)
 
-      @dealer.hit = (sum < 17 ? true : false)
+      @dealer.hit = (sum < 17)
       @dealer.busted = true if sum > 21
       break if !@dealer.hit || @dealer.busted
       @dealer.hand << @deck.deal
@@ -70,8 +79,36 @@ class Game
   end
 
   def total(player)
-    total = player.hand.inject(0) do |sum, card| 
+    total = player.hand.inject(0) do |sum, card|
       sum + card.value
+    end
+
+    aces = player.hand.count { |card| card.rank == 'Ace' }
+    aces_counted = 0
+    while total > 21 && (aces_counted < aces)
+      aces = player.hand.count { |card| card.rank == 'Ace' }
+      total -= 10
+      aces_counted += 1
+    end
+
+    total
+  end
+
+  def show_result
+    show_cards
+    puts "You have a total of #{total(@human)}"
+    puts "The dealer has a total of #{total(@dealer)}"
+    puts ""
+    show_win
+  end
+
+  def show_win
+    if !@human.busted && (@dealer.busted || (total(@human) > total(@dealer)))
+      puts "You win!"
+    elsif !@dealer.busted && (@human.busted || (total(@human) < total(@dealer)))
+      puts "Dealer wins!"
+    else
+      puts "It is a tie!"
     end
   end
 
@@ -136,6 +173,5 @@ class Deck
     @cards.shuffle!
   end
 end
-
 
 Game.new.start
