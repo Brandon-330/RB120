@@ -1,18 +1,14 @@
 class Person
-  attr_writer :first_name, :last_name
+  attr_accessor :first_name
+  attr_writer :last_name
 
   def first_equals_last?
     first_name == last_name
   end
 
   private
-  def first_name
-    @first_name
-  end
 
-  def last_name
-    @last_name
-  end
+  attr_reader :last_name
 end
 
 person1 = Person.new

@@ -1,31 +1,36 @@
 class FixedArray
-  attr_reader :arr
+  attr_reader :array
 
-  def initialize(arr_size)
-    @arr = Array.new(arr_size)
+  def initialize(num)
+    @array = Array.new(num)
   end
 
-  def [](ind)
-    raise IndexError if ind >= arr.size
-    arr[ind]
+  def []=(index, element)
+    if index >= array.size
+      raise IndexError
+    else
+      array[index] = element
+    end
   end
 
-  def []=(ind, set)
-    raise IndexError if ind >= arr.size
-    arr[ind] = set
+  def [](index)
+    if index >= array.size
+      raise IndexError
+    else
+      array[index]
+    end
   end
 
   def to_a
-    arr
+    array
   end
 
   def to_s
-    "#{arr}"
+    "#{array}"
   end
 end
 
 fixed_array = FixedArray.new(5)
-
 puts fixed_array[3] == nil
 puts fixed_array.to_a == [nil] * 5
 
@@ -64,7 +69,7 @@ rescue IndexError
 end
 
 begin
-  fixed_array[7] = 3 # error
+  fixed_array[7] = 3
   puts false
 rescue IndexError
   puts true

@@ -1,14 +1,4 @@
-class Animal
-  def run
-    'running!'
-  end
-
-  def jump
-    'jumping!'
-  end
-end
-
-class Dog < Animal
+class Dog
   def speak
     'bark!'
   end
@@ -16,15 +6,14 @@ class Dog < Animal
   def swim
     'swimming!'
   end
+end
 
-  def fetch
-    'fetching!'
+class Bulldog < Dog
+  def swim
+    'Cannot swim!'
   end
 end
 
-class Cat < Animal
-  def speak
-    'meow!'
-  end
-end
-
+teddy = Dog.new
+puts teddy.speak           # => "bark!"
+puts teddy.swim           # => "swimming!"

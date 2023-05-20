@@ -1,6 +1,7 @@
 class Cat
-  attr_reader :name
   COLOR = "purple"
+
+  attr_reader :name
 
   def initialize(name)
     @name = name

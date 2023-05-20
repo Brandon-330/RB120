@@ -18,14 +18,6 @@ class Length
     convert_to(:nmi, { km: 1.8519993, mi: 1.15078, nmi: 1 })
   end
 
-  def <=>(other)
-    case unit
-    when :km  then value <=> other.as_kilometers.value
-    when :mi  then value <=> other.as_miles.value
-    when :nmi then value <=> other.as_nautical_miles.value
-    end
-  end
-
   def ==(other)
     case unit
     when :km  then value == other.as_kilometers.value
@@ -40,6 +32,10 @@ class Length
     when :mi  then value < other.as_miles.value
     when :nmi then value < other.as_nautical_miles.value
     end
+  end
+
+  def <=>(other)
+    unit <=> other.unit
   end
 
   def <=(other)

@@ -1,9 +1,8 @@
 class Person
-  attr_reader :name
+  attr_writer :name
 
-  def name=(name)
-    name = name.downcase
-    @name = name[0].upcase + name[1..-1]
+  def name
+    @name.capitalize
   end
 end
 

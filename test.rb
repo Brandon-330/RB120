@@ -1,69 +1,111 @@
-module Moveable
-  attr_accessor :speed, :heading
-  attr_writer :fuel_capacity, :fuel_efficiency
+class Customer
+  attr_reader :order
 
-  def range
-    @fuel_capacity * @fuel_efficiency
+  def place_order
+    @order = Order.new
   end
 end
 
-class WheeledVehicle
-  include Moveable
+class Order
 
-  def initialize(tire_array, km_traveled_per_liter, liters_of_fuel_capacity)
-    @type = "wheeled"
-    @tires = tire_array
-    self.fuel_efficiency = km_traveled_per_liter
-    self.fuel_capacity = liters_of_fuel_capacity
-  end
-
-  def tire_pressure(tire_index)
-    @tires[tire_index]
-  end
-
-  def inflate_tire(tire_index, pressure)
-    @tires[tire_index] = pressure
-  end
-end
-
-class Auto < WheeledVehicle
   def initialize
-    # 4 tires are various tire pressures
-    super([30,30,32,32], 50, 25.0)
+    @order = MealItem.new
+  end
+
+  def total
+    total_cost = @burger + @side + @drink
+    format("$%.2f", total_cost) # #format formats the cost to two decimal places
+  end
+
+  def to_s
+    @order.meal.map(&:to_s).join(', ')
+  end
+
+  def +(other)
+    self.cost + other.cost
   end
 end
 
-class Motorcycle < WheeledVehicle
+class MealItem
   def initialize
-    # 2 tires are various tire pressures
-    super([20,20], 80, 8.0)
+    @burger = Burger.new
+    @side = Side.new
+    @drink = Drink.new
+  end
+  
+  def to_s
+    self.class::OPTIONS[@option][:name]
+  end
+
+  def meal
+    [@burger, @side, @drink]
+  end
+
+  def cost
+    self.class::OPTIONS[@option][:cost]
+  end
+
+  def choose_option
+    puts "Please choose a #{self.class} option:"
+    puts item_options # item_options returns a list of options and prices
+                      # for a particular item type
+    gets.chomp
+  end
+
+  def item_options
+    self.class::OPTIONS.each do |menu_number, inner_hash|
+      inner_hash.each do |k, v|
+        if k == :name
+          print "#{menu_number}: A #{v} costs "
+        else
+          print "#{v}"
+        end
+      end
+      puts ""
+    end
+    
+    nil
   end
 end
 
-class Boats
-  include Moveable
+class Burger < MealItem
+  OPTIONS = {
+    '1' => { name: 'LS Burger', cost: 3.00 },
+    '2' => { name: 'LS Cheeseburger', cost: 3.50 },
+    '3' => { name: 'LS Chicken Burger', cost: 4.50 },
+    '4' => { name: 'LS Double Deluxe Burger', cost: 6.00 }
+  }
 
-  attr_reader :propeller_count, :hull_count
-
-  def initialize(num_propellers, num_hulls, km_traveled_per_liter, liters_of_fuel_capacity)
-    @propeller_count = num_propellers
-    @hull_count = num_hulls
-    self.fuel_efficiency = km_traveled_per_liter
-    self.fuel_capacity = liters_of_fuel_capacity
-  end
-
-  def range
-    super + 10
+  def initialize
+    @option = choose_option
   end
 end
 
-class Catamaran < Boats
-end
+class Side < MealItem
+  OPTIONS = {
+    '1' => { name: 'Fries', cost: 0.99 },
+    '2' => { name: 'Onion Rings', cost: 1.50 }
+  }
 
-class Motorboat < Boats
-  def initialize(km_traveled_per_liter, liters_of_fuel_capacity)
-    super(1, 1, km_traveled_per_liter, liters_of_fuel_capacity)
+  def initialize
+    @option = choose_option
   end
 end
 
-puts Motorboat.new(40, 20).range
+class Drink < MealItem
+  OPTIONS = {
+    '1' => { name: 'Cola', cost: 1.50 },
+    '2' => { name: 'Lemonade', cost: 1.50 },
+    '3' => { name: 'Vanilla Shake', cost: 2.00 },
+    '4' => { name: 'Chocolate Shake', cost: 2.00 },
+    '5' => { name: 'Strawberry Shake', cost: 2.00 }
+  }
+
+  def initialize
+    @option = choose_option
+  end
+end
+
+rick = Customer.new
+rick.place_order
+puts rick.order.total

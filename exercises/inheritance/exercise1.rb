@@ -6,11 +6,9 @@ class Vehicle
   end
 end
 
-class Car < Vehicle
-end
+class Truck < Vehicle; end
 
-class Truck < Vehicle
-end
+class Car < Vehicle; end
 
 truck1 = Truck.new(1994)
 puts truck1.year

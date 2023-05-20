@@ -6,11 +6,11 @@ class Cat
   end
 
   def self.total
-    puts @@total_cats
+    @@total_cats
   end
 end
 
 kitty1 = Cat.new
 kitty2 = Cat.new
 
-Cat.total
+puts Cat.total

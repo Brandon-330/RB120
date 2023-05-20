@@ -2,7 +2,7 @@ class Person
   attr_writer :name
 
   def name
-    'Mr. ' + @name
+    "Mr. " + @name
   end
 end
 

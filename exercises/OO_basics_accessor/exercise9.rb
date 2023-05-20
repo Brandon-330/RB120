@@ -1,12 +1,10 @@
 class Person
-  attr_reader :age
-
   def age=(age)
     @age = age * 2
   end
 
   def age
-    age * 2
+    @age * 2
   end
 end
 

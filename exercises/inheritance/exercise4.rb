@@ -6,7 +6,7 @@ end
 
 class Truck < Vehicle
   def start_engine(speed)
-    super() + " Drive #{speed}, please!"
+    super() + " Drive #{speed} please!"
   end
 end
 

@@ -1,13 +1,10 @@
 class Person
-  attr_accessor :name
-  attr_reader :first, :last
-
-  def name=(string)
-    @first, @last = string.split
+  def name=(full_name)
+    @first_name, @last_name = full_name.split(' ')
   end
 
   def name
-    "#{first} #{last}"
+    @first_name + ' ' + @last_name
   end
 end
 

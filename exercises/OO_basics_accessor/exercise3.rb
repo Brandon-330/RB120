@@ -4,6 +4,10 @@ class Person
   def initialize(number)
     @phone_number = number
   end
+
+  private
+
+  attr_writer :phone_number
 end
 
 person1 = Person.new(1234567899)

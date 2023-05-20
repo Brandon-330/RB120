@@ -4,7 +4,7 @@ class Person
   end
 
   def name
-    @name.dup
+    @name.clone
   end
 end
 

@@ -11,6 +11,6 @@ class Cat
 end
 
 kitty = Cat.new('Sophie')
-p kitty.name
+puts kitty.name
 kitty.rename('Chloe')
-p kitty.name
+puts kitty.name

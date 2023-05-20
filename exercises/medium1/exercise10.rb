@@ -78,16 +78,19 @@ class PokerHand
   private
 
   def royal_flush?
-
+    royal? && flush?
   end
 
   def straight_flush?
+    straight? && flush?
   end
 
   def four_of_a_kind?
+    same_rank?(4)
   end
 
   def full_house?
+    same_rank?(3) && same_rank?(2)
   end
 
   def flush?
@@ -99,26 +102,45 @@ class PokerHand
   end
 
   def straight?
-    index = 0
-    @cards[1..-1].all? do |card|
-      convert_to_value(@cards[index].rank) + 1 == convert_to_value(card.rank)
-      index += 1
-    end
+    sequence?
   end
 
   def three_of_a_kind?
-    iterating_value = 1
-    while iterating_value <= 14 #Values are never greater than 14
-      frequency = @cards.count do |card|
-                  covert_to_value(card.rank)
-      end
-    end
+    same_rank?(3)
   end
 
   def two_pair?
   end
 
   def pair?
+    same_rank?(2)
+  end
+
+  def royal?
+    @cards.all? do |card| 
+      (%w(Ace King Queen Jack) + [10]).include?(card.rank)
+    end
+  end
+
+  def same_rank?(number_of_cards)
+    frequency = nil
+    counter = 1
+    while counter <= 14
+      frequency = @cards.count { |card| convert_to_value(card.rank) == counter }
+      break if frequency == number_of_cards
+      counter += 1
+    end
+
+    frequency == number_of_cards
+  end
+
+  def sequence?
+    @cards.sort_by! { |card| convert_to_value(card.rank) }
+    index = -1
+    @cards[1..-1].all? do |card|
+      index += 1
+      convert_to_value(@cards[index].rank) + 1 == convert_to_value(card.rank)
+    end
   end
 
   def convert_to_value(rank)

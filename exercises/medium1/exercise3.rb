@@ -5,12 +5,14 @@ class Student
   end
 end
 
-class Graduate < Student # 3 lines
+class Graduate < Student
   def initialize(name, year, parking)
     super(name, year)
     @parking = parking
   end
 end
 
-class Undergraduate < Student # 2 lines
+class Undergraduate < Student
 end
+
+undergrad = Undergraduate.new('Rick', 2018)

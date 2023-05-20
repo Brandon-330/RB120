@@ -1,9 +1,5 @@
 class Person
-  attr_reader :secret
-  
-  def secret=(string)
-    @secret = string
-  end
+  attr_accessor :secret
 end
 
 person1 = Person.new

@@ -6,7 +6,7 @@ class Cat
   end
 
   def self.generic_greeting
-    puts "Hello! I am a cat!"
+    puts "Hello! I'm a cat!"
   end
 
   def personal_greeting
