@@ -3,6 +3,8 @@ class Flight
     @database_handle = Database.init
     @flight_number = flight_number
   end
-end
 
-ticket = Flight.new(123)
+  private
+
+  attr_accessor :database_handle
+end

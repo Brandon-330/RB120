@@ -10,6 +10,13 @@ class Pet
   end
 end
 
+name = 'Fluffy'
+fluffy = Pet.new(name)
+puts fluffy.name
+puts fluffy
+puts fluffy.name
+puts name
+
 name = 42
 fluffy = Pet.new(name)
 name += 1

@@ -1,16 +1,16 @@
 class Transform
-  attr_reader :given_string
+  attr_reader :word
 
-  def initialize(str)
-    @given_string = str
+  def initialize(word)
+    @word = word
   end
 
   def uppercase
-    self.given_string.upcase
+    word.upcase
   end
 
-  def self.lowercase(str)
-    str.downcase
+  def self.lowercase(letters)
+    letters.downcase
   end
 end
 

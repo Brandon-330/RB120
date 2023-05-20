@@ -1,7 +1,4 @@
 class Wallet
-  attr_reader :amount
-  protected :amount
-
   include Comparable
 
   def initialize(amount)
@@ -11,6 +8,10 @@ class Wallet
   def <=>(other_wallet)
     amount <=> other_wallet.amount
   end
+
+  protected
+
+  attr_reader :amount
 end
 
 bills_wallet = Wallet.new(500)

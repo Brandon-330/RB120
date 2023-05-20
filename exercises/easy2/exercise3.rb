@@ -8,7 +8,7 @@ class House
   end
 
   def <=>(other)
-    self.price <=> other.price
+    price <=> other.price
   end
 end
 

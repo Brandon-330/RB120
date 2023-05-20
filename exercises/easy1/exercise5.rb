@@ -4,12 +4,12 @@ class Person
     @last_name = last_name.capitalize
   end
 
-  def first_name=(first)
-    @first_name = first.capitalize
+  def first_name=(first_name)
+    @first_name = first_name.capitalize
   end
 
-  def last_name=(last)
-    @last_name = last.capitalize
+  def last_name=(last_name)
+    @last_name = last_name.capitalize
   end
 
   def to_s

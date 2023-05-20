@@ -1,4 +1,6 @@
 class Banner
+  attr_reader :message
+
   def initialize(message)
     @message = message
   end
@@ -10,17 +12,17 @@ class Banner
   private
 
   def horizontal_rule
-    "+-" + "-" * @message.length + "-+"
+    "+-" + "-" * message.length + "-+"
   end
 
   def empty_line
-    "| " + " " * @message.length + " |"
+    "| " + " " * message.length + " |"
   end
 
   def message_line
-    "| #{@message} |"
+    "| #{message} |"
   end
 end
 
-banner = Banner.new('')
+banner = Banner.new('hello')
 puts banner

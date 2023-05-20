@@ -1,6 +1,4 @@
 module Mailable
-  attr_reader :name, :address, :city, :state, :zipcode
-
   def print_address
     puts "#{name}"
     puts "#{address}"
@@ -10,10 +8,14 @@ end
 
 class Customer
   include Mailable
+
+  attr_reader :name, :address, :city, :state, :zipcode
 end
 
 class Employee
   include Mailable
+
+  attr_reader :name, :address, :city, :state, :zipcode
 end
 
 betty = Customer.new 

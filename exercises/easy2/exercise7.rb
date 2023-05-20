@@ -1,39 +1,9 @@
-class Shelter
-  attr_accessor :owners
-  
-  def initialize
-    @owners = []
-  end
-
-  def adopt(owner, pet)
-    if !owners.include? owner
-      owners << owner
-    end
-
-    owner.pets << pet
-  end
-
-  def print_adoptions
-    owners.each do |owner|
-      puts "#{owner} has adopted the following pets:"
-      owner.pets.each do |pet|
-        puts "A #{pet}"
-      end
-      puts ""
-    end
-  end
-end
-
 class Pet
   attr_reader :type, :name
 
   def initialize(type, name)
     @type = type
     @name = name
-  end
-
-  def to_s
-    "#{type} named #{name}"
   end
 end
 
@@ -49,11 +19,31 @@ class Owner
   def number_of_pets
     pets.size
   end
+end
 
-  def to_s
-    "#{name}"
+class Shelter
+  attr_accessor :owners
+
+  def initialize
+    @owners = []
+  end
+
+  def adopt(owner, pet)
+    owners << owner if !owners.include? owner
+    owner.pets << pet
+  end
+
+  def print_adoptions
+    owners.each do |owner|
+      puts "#{owner.name} has adopted the following pets:"
+      owner.pets.each do |pet|
+        puts "a #{pet.type} named #{pet.name}"
+      end
+      puts ""
+    end
   end
 end
+
 
 butterscotch = Pet.new('cat', 'Butterscotch')
 pudding      = Pet.new('cat', 'Pudding')
