@@ -1,111 +1,107 @@
-class Customer
-  attr_reader :order
-
-  def place_order
-    @order = Order.new
+module Flyable
+  def fly
+    puts "I can fly!"
   end
 end
 
-class Order
+module Sociable
+  def social
+    puts "I talk... ALOT"
+  end
+end
+
+class Animal
+  @@total = 0
 
   def initialize
-    @order = MealItem.new
-  end
-
-  def total
-    total_cost = @burger + @side + @drink
-    format("$%.2f", total_cost) # #format formats the cost to two decimal places
+    @@total += 1
+    @animal_id = @@total
+    @body_temperature = "warm-blooded"
   end
 
   def to_s
-    @order.meal.map(&:to_s).join(', ')
+    <<-block
+=========================
+species: #{self.class}
+animal id: #{animal_id}
+weight: #{weight}
+diet: #{diet}
+body temp: #{body_temperature}
+=========================
+    block
   end
 
-  def +(other)
-    self.cost + other.cost
+  protected
+
+  attr_reader :animal_id, :weight, :diet, :body_temperature
+
+  protected 
+
+  def calc_weight(min_weight, max_weight)
+    (min_weight..max_weight).to_a.sample
   end
 end
 
-class MealItem
+class Herbivore < Animal
   def initialize
-    @burger = Burger.new
-    @side = Side.new
-    @drink = Drink.new
-  end
-  
-  def to_s
-    self.class::OPTIONS[@option][:name]
-  end
-
-  def meal
-    [@burger, @side, @drink]
-  end
-
-  def cost
-    self.class::OPTIONS[@option][:cost]
-  end
-
-  def choose_option
-    puts "Please choose a #{self.class} option:"
-    puts item_options # item_options returns a list of options and prices
-                      # for a particular item type
-    gets.chomp
-  end
-
-  def item_options
-    self.class::OPTIONS.each do |menu_number, inner_hash|
-      inner_hash.each do |k, v|
-        if k == :name
-          print "#{menu_number}: A #{v} costs "
-        else
-          print "#{v}"
-        end
-      end
-      puts ""
-    end
-    
-    nil
+    @diet = 'vegetation'
+    super
   end
 end
 
-class Burger < MealItem
-  OPTIONS = {
-    '1' => { name: 'LS Burger', cost: 3.00 },
-    '2' => { name: 'LS Cheeseburger', cost: 3.50 },
-    '3' => { name: 'LS Chicken Burger', cost: 4.50 },
-    '4' => { name: 'LS Double Deluxe Burger', cost: 6.00 }
-  }
+class Carnivore < Animal
+  def initialize
+    @diet = 'meat'
+    super
+  end
+
+  def hunt(prey)
+    puts "I ate a #{prey} for dinner. Yum!"
+  end
+end
+
+class Zebra < Herbivore
+  include Sociable
 
   def initialize
-    @option = choose_option
+    @weight = calc_weight(770, 990)
+    super
   end
 end
 
-class Side < MealItem
-  OPTIONS = {
-    '1' => { name: 'Fries', cost: 0.99 },
-    '2' => { name: 'Onion Rings', cost: 1.50 }
-  }
+class Hawk < Carnivore
+  include Flyable
 
   def initialize
-    @option = choose_option
+    @weight = calc_weight(12, 15)
+    super
   end
 end
 
-class Drink < MealItem
-  OPTIONS = {
-    '1' => { name: 'Cola', cost: 1.50 },
-    '2' => { name: 'Lemonade', cost: 1.50 },
-    '3' => { name: 'Vanilla Shake', cost: 2.00 },
-    '4' => { name: 'Chocolate Shake', cost: 2.00 },
-    '5' => { name: 'Strawberry Shake', cost: 2.00 }
-  }
+class Tiger < Carnivore
+  def initialize
+    @weight = calc_weight(200, 680)
+    super
+  end
+end
+
+class Koala < Herbivore
+  def initialize
+    @weight = calc_weight(10, 30)
+    super
+  end
+end
+
+class Parrot < Herbivore
+  include Flyable
+  include Sociable
 
   def initialize
-    @option = choose_option
+    @weight = calc_weight(1, 3)
+    super
   end
 end
 
-rick = Customer.new
-rick.place_order
-puts rick.order.total
+puts Zebra.new
+puts Tiger.new
+puts Parrot.new

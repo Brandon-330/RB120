@@ -1,31 +1,30 @@
 class Card
   attr_reader :rank, :suit
 
+  include Comparable
+
   def initialize(rank, suit)
     @rank = rank
     @suit = suit
   end
 
-  def to_s
-    "#{rank} of #{suit}"
+  def <=>(other_card)
+    convert_to_value(rank) <=> convert_to_value(other_card.rank)
   end
 
-  def value
+  def convert_to_value(rank)
     case rank
     when 'Jack' then 11
     when 'Queen' then 12
     when 'King' then 13
     when 'Ace' then 14
-    else rank
+    else
+      rank
     end
   end
 
-  def <=>(other)
-    value <=> other.value
-  end
-
-  def == (other)
-    self.to_s == other.to_s
+  def to_s
+    "#{rank} of #{suit}"
   end
 end
 
